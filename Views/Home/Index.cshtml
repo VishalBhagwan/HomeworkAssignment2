@@ -1,0 +1,49 @@
+﻿@{
+    ViewBag.Title = "RescuePet - Home";
+}
+
+<div class="container mt-4">
+    <div class="jumbotron p-5 rounded mb-5">
+        <h1 class="display-4">Adopt Love, <small class="text-light">Foster Happiness</small></h1>
+        <div class="alert alert-success mt-4" style="background-color: rgba(255,255,255,0.9);">
+            <h3 class="text-dark mb-0">Pets Homed: <strong class="text-success">@ViewBag.AdoptedCount</strong></h3>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-8">
+            <h3 class="mb-4">Recent Adoptions</h3>
+            <div class="list-group">
+                @if (ViewBag.Adoptions != null && ViewBag.Adoptions.Count > 0)
+                {
+                    foreach (var adoption in ViewBag.Adoptions)
+                    {
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong class="text-primary">@adoption.PetName</strong> adopted by
+                                <strong>@adoption.AdoptedByUserName</strong>
+                            </div>
+                            <span class="text-muted">@adoption.AdoptionDate.ToString("dd MMM yyyy")</span>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="list-group-item text-center text-muted">
+                        No adoptions yet. Be the first to give a pet a loving home!
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-success">What we do?</h5>
+                    <p class="card-text">With a focus on matching the right pet with the right family, RescuePet makes it easy to adopt love and foster happiness.</p>
+                    @Html.ActionLink("View Pets", "Index", "Pets", null, new { @class = "btn btn-success btn-lg mt-3" })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

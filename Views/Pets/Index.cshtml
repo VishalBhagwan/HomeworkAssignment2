@@ -1,0 +1,149 @@
+﻿@model List<HomeworkAssignment2.Models.Pet>
+@{
+    ViewBag.Title = "Available Pets";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Available Pets</h2>
+
+    <!-- Filter Dropdowns -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-2">
+            <div class="dropdown">
+                <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown">
+                    Type: @(ViewBag.CurrentType == "All" ? "All Types" : ViewBag.CurrentType)
+                </button>
+                <ul class="dropdown-menu w-100">
+                    <li>@Html.ActionLink("Reset", "SetTypeFilter", "Home", new { type = "All" }, new { @class = "dropdown-item" })</li>
+                    <li><hr class="dropdown-divider"></li>
+                    @foreach (string type in ViewBag.Types)
+                    {
+                        if (ViewBag.CurrentType != type)
+                        {
+                            <li>@Html.ActionLink(type, "SetTypeFilter", "Home", new { type = type }, new { @class = "dropdown-item" })</li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-2">
+            <div class="dropdown">
+                <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown">
+                    Breed: @(ViewBag.CurrentBreed == "All" ? "All Breeds" : ViewBag.CurrentBreed)
+                </button>
+                <ul class="dropdown-menu w-100">
+                    <li>@Html.ActionLink("Reset", "SetBreedFilter", "Home", new { breed = "All" }, new { @class = "dropdown-item" })</li>
+                    <li><hr class="dropdown-divider"></li>
+                    @foreach (string breed in ViewBag.Breeds)
+                    {
+                        if (ViewBag.CurrentBreed != breed)
+                        {
+                            <li>@Html.ActionLink(breed, "SetBreedFilter", "Home", new { breed = breed }, new { @class = "dropdown-item" })</li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-2">
+            <div class="dropdown">
+                <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown">
+                    Location: @(ViewBag.CurrentLocation == "All" ? "All Locations" : ViewBag.CurrentLocation)
+                </button>
+                <ul class="dropdown-menu w-100">
+                    <li>@Html.ActionLink("Reset", "SetLocationFilter", "Home", new { location = "All" }, new { @class = "dropdown-item" })</li>
+                    <li><hr class="dropdown-divider"></li>
+                    @foreach (string location in ViewBag.Locations)
+                    {
+                        if (ViewBag.CurrentLocation != location)
+                        {
+                            <li>@Html.ActionLink(location, "SetLocationFilter", "Home", new { location = location }, new { @class = "dropdown-item" })</li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-2">
+            <div class="dropdown">
+                <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown">
+                    Status: @ViewBag.CurrentStatus
+                </button>
+                <ul class="dropdown-menu w-100">
+                    <li>@Html.ActionLink("Reset All", "ResetFilters", "Home", null, new { @class = "dropdown-item" })</li>
+                    <li><hr class="dropdown-divider"></li>
+                    @foreach (string statusItem in ViewBag.Statuses)
+                    {
+                        if (ViewBag.CurrentStatus != statusItem)
+                        {
+                            <li>@Html.ActionLink(statusItem, "SetStatusFilter", "Home", new { status = statusItem }, new { @class = "dropdown-item" })</li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pets Grid -->
+    <div class="row">
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var pet in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        @if (!string.IsNullOrEmpty(pet.ImageBase64))
+                        {
+                            <img src="data:image/jpeg;base64,@pet.ImageBase64" class="card-img-top" alt="@pet.Name" style="height: 250px; object-fit: cover;">
+                        }
+                        else
+                        {
+                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 250px;">
+                                <span class="text-muted">No Image Available</span>
+                            </div>
+                        }
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title text-primary">@pet.Name</h5>
+                            <p class="card-text">
+                                <strong class="text-success">@pet.Location</strong><br>
+                                <strong>Type:</strong> @pet.Type - @pet.Breed<br>
+                                <strong>Age:</strong> @pet.Age years | <strong>Weight:</strong> @pet.Weight kg<br>
+                                <strong>Gender:</strong> @pet.Gender
+                            </p>
+                            <p class="card-text flex-grow-1">
+                                <small class="text-muted">@pet.PetStory</small>
+                            </p>
+                            <div class="mt-auto">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="badge @(pet.Status == "Available" ? "bg-success" : "bg-secondary")">
+                                        @pet.Status
+                                    </span>
+                                    <small class="text-muted">Posted by: @pet.PostedByUserName</small>
+                                </div>
+                                @if (pet.Status == "Available")
+                                {
+                                    @Html.ActionLink("View & Adopt", "Adopt", new { id = pet.PetId }, new { @class = "btn btn-success w-100" })
+                                }
+                                else
+                                {
+                                    <button class="btn btn-secondary w-100" disabled>Already Adopted</button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <div class="alert alert-info text-center py-5">
+                    <h4>🐾 No pets found matching your filters</h4>
+                    <p class="mb-3">Try adjusting your filters or check back later for new pets.</p>
+                    @Html.ActionLink("Reset All Filters", "ResetFilters", "Home", null, new { @class = "btn btn-outline-info" })
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,96 @@
+﻿@model HomeworkAssignment2.Models.Pet
+@{
+    ViewBag.Title = "Adopt " + Model.Name;
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Adopt @Model.Name</h2>
+
+    <div class="row">
+        <div class="col-md-6">
+            @if (!string.IsNullOrEmpty(Model.ImageBase64))
+            {
+                <img src="data:image/jpeg;base64,@Model.ImageBase64" class="img-fluid rounded shadow" alt="@Model.Name">
+            }
+            else
+            {
+                <div class="bg-light rounded shadow d-flex align-items-center justify-content-center" style="height: 400px;">
+                    <span class="text-muted">No Image Available</span>
+                </div>
+            }
+
+            <div class="mt-4">
+                <h4 class="text-success">Pet Details</h4>
+                <div class="list-group">
+                    <div class="list-group-item">
+                        <strong>Name:</strong> @Model.Name
+                    </div>
+                    <div class="list-group-item">
+                        <strong>Type:</strong> @Model.Type
+                    </div>
+                    <div class="list-group-item">
+                        <strong>Breed:</strong> @Model.Breed
+                    </div>
+                    <div class="list-group-item">
+                        <strong>Location:</strong> @Model.Location
+                    </div>
+                    <div class="list-group-item">
+                        <strong>Age:</strong> @Model.Age years
+                    </div>
+                    <div class="list-group-item">
+                        <strong>Weight:</strong> @Model.Weight kg
+                    </div>
+                    <div class="list-group-item">
+                        <strong>Gender:</strong> @Model.Gender
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">Adoption Form</h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="text-muted mb-4">Complete this form to adopt @Model.Name</h6>
+
+                    @using (Html.BeginForm("Adopt", "Pets", FormMethod.Post))
+                    {
+                        <input type="hidden" name="petId" value="@Model.PetId" />
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Your Full Name:</label>
+                            <select name="adoptedByUserId" class="form-select form-select-lg" required>
+                                <option value="">Select your name</option>
+                                @foreach (var user in ViewBag.Users)
+                                {
+                                    <option value="@user.UserId">@user.FirstName @user.LastName</option>
+                                }
+                            </select>
+                            <div class="form-text">Please select your name from the list</div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <h6 class="alert-heading">Adoption Agreement</h6>
+                            <p class="mb-0">By adopting @Model.Name, you agree to provide a loving and caring home. Thank you for choosing to adopt!</p>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-lg w-100 py-3">
+                            <strong>Adopt @Model.Name Now</strong>
+                        </button>
+                    }
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <h5 class="text-success">Pet's Story</h5>
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-text">@Model.PetStory</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
