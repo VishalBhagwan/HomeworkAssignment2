@@ -2,48 +2,121 @@
     ViewBag.Title = "RescuePet - Home";
 }
 
-<div class="container mt-4">
-    <div class="jumbotron p-5 rounded mb-5">
-        <h1 class="display-4">Adopt Love, <small class="text-light">Foster Happiness</small></h1>
-        <div class="alert alert-success mt-4" style="background-color: rgba(255,255,255,0.9);">
-            <h3 class="text-dark mb-0">Pets Homed: <strong class="text-success">@ViewBag.AdoptedCount</strong></h3>
+<div class="container-fluid px-0">
+    <!-- Hero Section -->
+    <div class="bg-success text-white py-4">
+        <div class="container">
+            <div class="text-center">
+                <h4 class="mb-3 fw-bold">RescuePet</h4>
+                <h1 class="display-4 fw-bold mb-2">Adopt Love,</h1>
+                <h2 class="display-5 fw-light mb-4">Foster happiness.</h2>
+                <div class="bg-light text-success d-inline-block px-4 py-3 rounded">
+                    <h4 class="fw-bold mb-0">Pets Homed <span class="d-block display-6">@ViewBag.AdoptedCount</span></h4>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="row mt-5">
-        <div class="col-md-8">
-            <h3 class="mb-4">Recent Adoptions</h3>
-            <div class="list-group">
-                @if (ViewBag.Adoptions != null && ViewBag.Adoptions.Count > 0)
-                {
-                    foreach (var adoption in ViewBag.Adoptions)
-                    {
-                        <div class="list-group-item d-flex justify-content-between align-items-center">
-                            <div>
-                                <strong class="text-primary">@adoption.PetName</strong> adopted by
-                                <strong>@adoption.AdoptedByUserName</strong>
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <!-- What We Do Section - Card Style -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-success shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h5 class="card-title text-success fw-bold mb-2">What we do?</h5>
+                                <p class="card-text text-muted mb-0">
+                                    With a focus on matching the right pet with the right family, RescuePet makes it easy to adopt love and foster happiness.
+                                </p>
                             </div>
-                            <span class="text-muted">@adoption.AdoptionDate.ToString("dd MMM yyyy")</span>
+                            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                                @Html.ActionLink("View pets", "Index", "Pets", null, new { @class = "btn btn-success btn-lg fw-bold" })
+                            </div>
                         </div>
-                    }
-                }
-                else
-                {
-                    <div class="list-group-item text-center text-muted">
-                        No adoptions yet. Be the first to give a pet a loving home!
                     </div>
-                }
+                </div>
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <h5 class="card-title text-success">What we do?</h5>
-                    <p class="card-text">With a focus on matching the right pet with the right family, RescuePet makes it easy to adopt love and foster happiness.</p>
-                    @Html.ActionLink("View Pets", "Index", "Pets", null, new { @class = "btn btn-success btn-lg mt-3" })
+        <!-- Recent Adoptions Section -->
+        <div class="row">
+            <div class="col-12">
+                <h4 class="mb-3 text-dark fw-bold">Recent Adoptions</h4>
+
+                <div class="list-group">
+                    @if (ViewBag.Adoptions != null && ViewBag.Adoptions.Count > 0)
+                    {
+                        foreach (var adoption in ViewBag.Adoptions)
+                        {
+                            <div class="list-group-item d-flex align-items-center py-2">
+                                <div class="form-check me-2">
+                                    <input class="form-check-input" type="checkbox" checked disabled style="transform: scale(1.1);">
+                                </div>
+                                <div class="flex-grow-1">
+                                    <strong class="text-dark">@adoption.PetName</strong> adopted by
+                                    <strong class="text-dark">@adoption.AdoptedByUserName</strong>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="list-group-item text-center text-muted py-3">
+                            No adoptions yet. Be the first to give a pet a loving home!
+                        </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .bg-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+    }
+
+    .list-group-item {
+        border-left: 3px solid #28a745;
+        margin-bottom: 4px;
+        border-radius: 4px !important;
+        border: 1px solid #e9ecef;
+        transition: background-color 0.2s ease;
+        padding: 8px 12px;
+    }
+
+        .list-group-item:hover {
+            background-color: #f8f9fa;
+        }
+
+    .form-check-input:checked {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .list-group {
+        border: none !important;
+        background: transparent;
+    }
+
+    .btn-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        border: none;
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #218838 0%, #1e9e8a 100%);
+        }
+
+    .text-dark {
+        color: #2c3e50 !important;
+    }
+
+    .card {
+        border-width: 2px !important;
+    }
+</style>

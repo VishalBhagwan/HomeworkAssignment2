@@ -11,37 +11,39 @@ namespace HomeworkAssignment2.Controllers
     {
         private RescuePetDataService dataService = new RescuePetDataService();
 
-        public ActionResult Index()
+        public ActionResult Index(string type, string breed, string location, string status)
         {
-            var pets = dataService.GetAllPetsByFilters(
-                HomeController.TypeFilter,
-                HomeController.BreedFilter,
-                HomeController.LocationFilter,
-                HomeController.StatusFilter
-            );
+            // Set default values if null
+            type = type ?? "All";
+            breed = breed ?? "All";
+            location = location ?? "All";
+            status = status ?? "All";
 
+            // Get filtered pets
+            var pets = dataService.GetAllPetsByFilters(type, breed, location, status);
+
+            // Populate ViewBag for dropdowns
             ViewBag.Types = dataService.GetDistinctTypes();
             ViewBag.Locations = dataService.GetDistinctLocations();
             ViewBag.Breeds = dataService.GetDistinctBreeds();
-            ViewBag.Statuses = new[] { "All", "Available", "Adopted" };
 
-            ViewBag.CurrentType = HomeController.TypeFilter;
-            ViewBag.CurrentBreed = HomeController.BreedFilter;
-            ViewBag.CurrentLocation = HomeController.LocationFilter;
-            ViewBag.CurrentStatus = HomeController.StatusFilter;
+            // Pass current selections back to view
+            ViewBag.CurrentType = type;
+            ViewBag.CurrentBreed = breed;
+            ViewBag.CurrentLocation = location;
+            ViewBag.CurrentStatus = status;
 
             return View(pets);
         }
 
+        // Your existing Adopt methods remain the same
         public ActionResult Adopt(int id)
         {
             var pet = dataService.GetPetById(id);
-
             if (pet == null)
             {
                 return HttpNotFound();
             }
-
             ViewBag.Users = dataService.GetAllUsers();
             return View(pet);
         }

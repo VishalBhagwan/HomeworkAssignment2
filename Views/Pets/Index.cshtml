@@ -1,149 +1,320 @@
 ﻿@model List<HomeworkAssignment2.Models.Pet>
 @{
-    ViewBag.Title = "Available Pets";
+    ViewBag.Title = "Pets";
 }
 
-<div class="container mt-4">
-    <h2 class="mb-4">Available Pets</h2>
-
-    <!-- Filter Dropdowns -->
-    <div class="row mb-4">
-        <div class="col-md-3 mb-2">
-            <div class="dropdown">
-                <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown">
-                    Type: @(ViewBag.CurrentType == "All" ? "All Types" : ViewBag.CurrentType)
-                </button>
-                <ul class="dropdown-menu w-100">
-                    <li>@Html.ActionLink("Reset", "SetTypeFilter", "Home", new { type = "All" }, new { @class = "dropdown-item" })</li>
-                    <li><hr class="dropdown-divider"></li>
-                    @foreach (string type in ViewBag.Types)
-                    {
-                        if (ViewBag.CurrentType != type)
-                        {
-                            <li>@Html.ActionLink(type, "SetTypeFilter", "Home", new { type = type }, new { @class = "dropdown-item" })</li>
-                        }
-                    }
-                </ul>
-            </div>
-        </div>
-
-        <div class="col-md-3 mb-2">
-            <div class="dropdown">
-                <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown">
-                    Breed: @(ViewBag.CurrentBreed == "All" ? "All Breeds" : ViewBag.CurrentBreed)
-                </button>
-                <ul class="dropdown-menu w-100">
-                    <li>@Html.ActionLink("Reset", "SetBreedFilter", "Home", new { breed = "All" }, new { @class = "dropdown-item" })</li>
-                    <li><hr class="dropdown-divider"></li>
-                    @foreach (string breed in ViewBag.Breeds)
-                    {
-                        if (ViewBag.CurrentBreed != breed)
-                        {
-                            <li>@Html.ActionLink(breed, "SetBreedFilter", "Home", new { breed = breed }, new { @class = "dropdown-item" })</li>
-                        }
-                    }
-                </ul>
-            </div>
-        </div>
-
-        <div class="col-md-3 mb-2">
-            <div class="dropdown">
-                <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown">
-                    Location: @(ViewBag.CurrentLocation == "All" ? "All Locations" : ViewBag.CurrentLocation)
-                </button>
-                <ul class="dropdown-menu w-100">
-                    <li>@Html.ActionLink("Reset", "SetLocationFilter", "Home", new { location = "All" }, new { @class = "dropdown-item" })</li>
-                    <li><hr class="dropdown-divider"></li>
-                    @foreach (string location in ViewBag.Locations)
-                    {
-                        if (ViewBag.CurrentLocation != location)
-                        {
-                            <li>@Html.ActionLink(location, "SetLocationFilter", "Home", new { location = location }, new { @class = "dropdown-item" })</li>
-                        }
-                    }
-                </ul>
-            </div>
-        </div>
-
-        <div class="col-md-3 mb-2">
-            <div class="dropdown">
-                <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown">
-                    Status: @ViewBag.CurrentStatus
-                </button>
-                <ul class="dropdown-menu w-100">
-                    <li>@Html.ActionLink("Reset All", "ResetFilters", "Home", null, new { @class = "dropdown-item" })</li>
-                    <li><hr class="dropdown-divider"></li>
-                    @foreach (string statusItem in ViewBag.Statuses)
-                    {
-                        if (ViewBag.CurrentStatus != statusItem)
-                        {
-                            <li>@Html.ActionLink(statusItem, "SetStatusFilter", "Home", new { status = statusItem }, new { @class = "dropdown-item" })</li>
-                        }
-                    }
-                </ul>
+<div class="container-fluid px-0">
+    <!-- Hero Section -->
+    <div class="bg-success text-white py-4">
+        <div class="container">
+            <div class="text-center">
+                <h1 class="display-4 fw-bold mb-2">Pets</h1>
             </div>
         </div>
     </div>
 
-    <!-- Pets Grid -->
-    <div class="row">
-        @if (Model != null && Model.Count > 0)
-        {
-            foreach (var pet in Model)
-            {
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100 shadow-sm">
-                        @if (!string.IsNullOrEmpty(pet.ImageBase64))
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Filters Sidebar -->
+            <div class="col-lg-3 mb-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="card-title mb-0">Search Filters</h5>
+                    </div>
+                    <div class="card-body">
+                        @using (Html.BeginForm("Index", "Pets", FormMethod.Get, new { @class = "search-form" }))
                         {
-                            <img src="data:image/jpeg;base64,@pet.ImageBase64" class="card-img-top" alt="@pet.Name" style="height: 250px; object-fit: cover;">
-                        }
-                        else
-                        {
-                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 250px;">
-                                <span class="text-muted">No Image Available</span>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-dark">Type</label>
+                                <select name="type" class="form-select form-select-sm">
+                                    <option value="All">All Types</option>
+                                    @if (ViewBag.Types != null)
+                                    {
+                                        foreach (string type in ViewBag.Types)
+                                        {
+                                            <option value="@type" @(ViewBag.CurrentType == type ? "selected" : "")>@type</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-dark">Breed</label>
+                                <select name="breed" class="form-select form-select-sm">
+                                    <option value="All">All Breeds</option>
+                                    @if (ViewBag.Breeds != null)
+                                    {
+                                        foreach (string breed in ViewBag.Breeds)
+                                        {
+                                            <option value="@breed" @(ViewBag.CurrentBreed == breed ? "selected" : "")>@breed</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-dark">Location</label>
+                                <select name="location" class="form-select form-select-sm">
+                                    <option value="All">All Locations</option>
+                                    @if (ViewBag.Locations != null)
+                                    {
+                                        foreach (string location in ViewBag.Locations)
+                                        {
+                                            <option value="@location" @(ViewBag.CurrentLocation == location ? "selected" : "")>@location</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-dark">Status</label>
+                                <select name="status" class="form-select form-select-sm">
+                                    <option value="All" @(ViewBag.CurrentStatus == "All" ? "selected" : "")>All Statuses</option>
+                                    <option value="Available" @(ViewBag.CurrentStatus == "Available" ? "selected" : "")>Available</option>
+                                    <option value="Adopted" @(ViewBag.CurrentStatus == "Adopted" ? "selected" : "")>Adopted</option>
+                                </select>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-success btn-sm">
+                                    <i class="fas fa-search"></i> Search
+                                </button>
+                                <a href="@Url.Action("Index", "Pets")" class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-times"></i> Clear
+                                </a>
                             </div>
                         }
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title text-primary">@pet.Name</h5>
-                            <p class="card-text">
-                                <strong class="text-success">@pet.Location</strong><br>
-                                <strong>Type:</strong> @pet.Type - @pet.Breed<br>
-                                <strong>Age:</strong> @pet.Age years | <strong>Weight:</strong> @pet.Weight kg<br>
-                                <strong>Gender:</strong> @pet.Gender
-                            </p>
-                            <p class="card-text flex-grow-1">
-                                <small class="text-muted">@pet.PetStory</small>
-                            </p>
-                            <div class="mt-auto">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="badge @(pet.Status == "Available" ? "bg-success" : "bg-secondary")">
-                                        @pet.Status
-                                    </span>
-                                    <small class="text-muted">Posted by: @pet.PostedByUserName</small>
+                    </div>
+                </div>
+
+                <!-- Active Filters -->
+                @if (ViewBag.CurrentType != "All" || ViewBag.CurrentBreed != "All" || ViewBag.CurrentLocation != "All" || ViewBag.CurrentStatus != "All")
+                {
+                    <div class="mt-3 p-3 bg-light rounded">
+                        <h6 class="fw-bold text-dark mb-2">Active Filters:</h6>
+                        <div class="d-flex flex-wrap gap-1">
+                            @if (ViewBag.CurrentType != "All")
+                            {
+                                <span class="badge bg-success">Type: @ViewBag.CurrentType</span>
+                            }
+                            @if (ViewBag.CurrentBreed != "All")
+                            {
+                                <span class="badge bg-success">Breed: @ViewBag.CurrentBreed</span>
+                            }
+                            @if (ViewBag.CurrentLocation != "All")
+                            {
+                                <span class="badge bg-success">Location: @ViewBag.CurrentLocation</span>
+                            }
+                            @if (ViewBag.CurrentStatus != "All")
+                            {
+                                <span class="badge bg-success">Status: @ViewBag.CurrentStatus</span>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Pets List -->
+            <div class="col-lg-9">
+                @if (Model != null && Model.Count > 0)
+                {
+                    <div class="row">
+                        @foreach (var pet in Model)
+                        {
+                            <div class="col-md-6 col-xl-4 mb-4">
+                                <div class="card h-100 border-0 shadow-sm pet-card">
+                                    <!-- Pet Image -->
+                                    <div class="pet-image-container">
+                                        @if (!string.IsNullOrEmpty(pet.ImageBase64))
+                                        {
+                                            <img src="data:image/jpeg;base64,@pet.ImageBase64" class="card-img-top pet-image" alt="@pet.Name">
+                                        }
+                                        else
+                                        {
+                                            <div class="card-img-top pet-image bg-light d-flex align-items-center justify-content-center">
+                                                <div class="text-center text-muted">
+                                                    <i class="fas fa-paw fa-3x mb-2"></i>
+                                                    <div>No Image Available</div>
+                                                </div>
+                                            </div>
+                                        }
+                                        <div class="pet-status-badge">
+                                            <span class="badge @(pet.Status == "Available" ? "bg-success" : "bg-secondary")">
+                                                @pet.Status
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body d-flex flex-column">
+                                        <!-- Pet Header -->
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h5 class="card-title text-dark fw-bold mb-0">@pet.Name</h5>
+                                            <small class="text-muted">@pet.Location</small>
+                                        </div>
+
+                                        <!-- Pet Details -->
+                                        <div class="mb-2">
+                                            <small class="text-muted">
+                                                <strong>Type:</strong> @pet.Type - @pet.Breed<br>
+                                                <strong>Age:</strong> @pet.Age years | <strong>Weight:</strong> @pet.Weight kg<br>
+                                                <strong>Gender:</strong> @pet.Gender
+                                            </small>
+                                        </div>
+
+                                        <!-- Pet Story -->
+                                        <p class="card-text flex-grow-1 mb-3">
+                                            <small class="text-muted">@pet.PetStory</small>
+                                        </p>
+
+                                        <!-- Footer -->
+                                        <div class="mt-auto">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <small class="text-muted">
+                                                    <i class="fas fa-user"></i> Posted by: @pet.PostedByUserName
+                                                </small>
+                                                @if (pet.Status == "Available")
+                                                {
+                                                    @Html.ActionLink("View & Adopt", "Adopt", new { id = pet.PetId }, new { @class = "btn btn-success btn-sm" })
+                                                }
+                                                else
+                                                {
+                                                    <button class="btn btn-secondary btn-sm" disabled>Adopted</button>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                @if (pet.Status == "Available")
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Results Count -->
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <div class="alert alert-light text-center py-2">
+                                <strong class="text-success">@Model.Count</strong> pets found
+                                @if (ViewBag.CurrentType != "All" || ViewBag.CurrentBreed != "All" || ViewBag.CurrentLocation != "All" || ViewBag.CurrentStatus != "All")
                                 {
-                                    @Html.ActionLink("View & Adopt", "Adopt", new { id = pet.PetId }, new { @class = "btn btn-success w-100" })
-                                }
-                                else
-                                {
-                                    <button class="btn btn-secondary w-100" disabled>Already Adopted</button>
+                                    <span class="text-muted">matching your search criteria</span>
                                 }
                             </div>
                         </div>
                     </div>
-                </div>
-            }
-        }
-        else
-        {
-            <div class="col-12">
-                <div class="alert alert-info text-center py-5">
-                    <h4>🐾 No pets found matching your filters</h4>
-                    <p class="mb-3">Try adjusting your filters or check back later for new pets.</p>
-                    @Html.ActionLink("Reset All Filters", "ResetFilters", "Home", null, new { @class = "btn btn-outline-info" })
-                </div>
+                }
+                else
+                {
+                    <!-- No Pets Found -->
+                    <div class="text-center py-5">
+                        <div class="mb-4">
+                            <i class="fas fa-search fa-4x text-muted mb-3"></i>
+                            <h4 class="text-dark">No pets found</h4>
+                            <p class="text-muted mb-4">Try adjusting your search filters or check back later for new pets.</p>
+                        </div>
+                        <div class="d-flex justify-content-center gap-2">
+                            <a href="@Url.Action("Index", "Pets")" class="btn btn-outline-success">
+                                <i class="fas fa-times"></i> Clear Filters
+                            </a>
+                            @Html.ActionLink("Post a New Pet", "Create", "PostPet", null, new { @class = "btn btn-success" })
+                        </div>
+                    </div>
+                }
             </div>
-        }
+        </div>
     </div>
 </div>
+
+<style>
+    .bg-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+    }
+
+    .card-header.bg-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+        border: none;
+    }
+
+    .pet-card {
+        transition: all 0.3s ease;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+        .pet-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+        }
+
+    .pet-image-container {
+        position: relative;
+        height: 200px;
+        overflow: hidden;
+    }
+
+    .pet-image {
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .pet-card:hover .pet-image {
+        transform: scale(1.05);
+    }
+
+    .pet-status-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+    .form-select {
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+    }
+
+        .form-select:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        }
+
+    .btn-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        border: none;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #218838 0%, #1e9e8a 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        }
+
+    .badge.bg-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+    }
+
+    .text-dark {
+        color: #2c3e50 !important;
+    }
+
+    .card {
+        border-radius: 12px;
+    }
+
+    .search-form .form-label {
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Responsive adjustments */
+    @@media (max-width: 768px) {
+        .pet-image-container {
+            height: 150px;
+        }
+
+        .card-body {
+            padding: 1rem;
+        }
+    }
+</style>
