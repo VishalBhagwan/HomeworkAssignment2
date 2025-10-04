@@ -3,113 +3,250 @@
     ViewBag.Title = "Post a Pet for Adoption";
 }
 
-<div class="container mt-4">
-    <h2 class="mb-4">Post a Pet for Adoption</h2>
-
-    @using (Html.BeginForm("Create", "PostPet", FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {
-        <div class="row">
-            <!-- Your Details Section -->
-            <div class="col-md-6">
-                <div class="card shadow mb-4">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="card-title mb-0">Your Details</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Your Full Name:</label>
-                            <select name="postedByUserId" class="form-select" required>
-                                <option value="">Select your name</option>
-                                @foreach (var user in ViewBag.Users)
-                                {
-                                    <option value="@user.UserId">@user.FirstName @user.LastName</option>
-                                }
-                            </select>
-                            <div class="form-text">Select your name from the registered users list</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Pet Details Section -->
-            <div class="col-md-6">
-                <div class="card shadow">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="card-title mb-0">Pet Details</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Pet Name:</label>
-                            <input type="text" name="Name" class="form-control" required />
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Type:</label>
-                            <select name="Type" class="form-select" required>
-                                <option value="">Select Type</option>
-                                @foreach (var type in ViewBag.Types)
-                                {
-                                    <option value="@type">@type</option>
-                                }
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Breed:</label>
-                            <input type="text" name="Breed" class="form-control" required />
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Location:</label>
-                            <select name="Location" class="form-select" required>
-                                <option value="">Select Location</option>
-                                @foreach (var location in ViewBag.Locations)
-                                {
-                                    <option value="@location">@location</option>
-                                }
-                            </select>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label fw-bold">Age (years):</label>
-                                    <input type="number" name="Age" class="form-control" min="0" required />
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label fw-bold">Weight (kg):</label>
-                                    <input type="number" name="Weight" class="form-control" min="0" step="0.1" required />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Gender:</label>
-                            <select name="Gender" class="form-select" required>
-                                <option value="">Select Gender</option>
-                                @foreach (var gender in ViewBag.Genders)
-                                {
-                                    <option value="@gender">@gender</option>
-                                }
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Pet Story:</label>
-                            <textarea name="PetStory" class="form-control" rows="3" required></textarea>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Pet Image:</label>
-                            <input type="file" name="petImage" class="form-control" accept="image/*" required>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary btn-lg w-100">Post Pet for Adoption</button>
-                    </div>
-                </div>
+<div class="container-fluid px-0">
+    <!-- Hero Section -->
+    <div class="bg-success text-white py-4">
+        <div class="container">
+            <div class="text-center">
+                <h1 class="display-4 fw-bold mb-2">Post a Pet</h1>
             </div>
         </div>
-    }
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        @using (Html.BeginForm("Create", "PostPet", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <!-- Your Details Section -->
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-header bg-success text-white py-3">
+                            <h5 class="card-title mb-0 fw-bold">Your Details</h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="mb-4">
+                                <label class="form-label fw-bold text-dark mb-2">Full Name</label>
+                                <select name="postedByUserId" class="form-select form-select-lg border-0 bg-light py-3" required
+                                        style="border-radius: 10px; font-size: 1.1rem;">
+                                    <option value="" selected disabled>Select your name</option>
+                                    @if (ViewBag.Users != null)
+                                    {
+                                        foreach (var user in ViewBag.Users)
+                                        {
+                                            <option value="@user.UserId">@user.FirstName @user.LastName</option>
+                                        }
+                                    }
+                                </select>
+                                <div class="form-text text-muted mt-1">Please select your name from the list</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pet Details Section (including Pet Story) -->
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-success text-white py-3">
+                            <h5 class="card-title mb-0 fw-bold">Pet Details</h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <!-- Pet Name -->
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-dark mb-2">Pet Name</label>
+                                <input type="text" name="Name" class="form-control form-control-lg border-0 bg-light py-3"
+                                       style="border-radius: 10px; font-size: 1.1rem;" placeholder="Enter pet name" required />
+                            </div>
+
+                            <!-- Type and Breed Row -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold text-dark mb-2">Type</label>
+                                    <select name="Type" class="form-select form-select-lg border-0 bg-light py-3" required
+                                            style="border-radius: 10px; font-size: 1.1rem;">
+                                        <option value="" selected disabled>Select Type</option>
+                                        @if (ViewBag.Types != null)
+                                        {
+                                            foreach (var type in ViewBag.Types)
+                                            {
+                                                <option value="@type">@type</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold text-dark mb-2">Breed</label>
+                                    <select name="Breed" class="form-select form-select-lg border-0 bg-light py-3" required
+                                            style="border-radius: 10px; font-size: 1.1rem;">
+                                        <option value="" selected disabled>Select Breed</option>
+                                        @if (ViewBag.Breeds != null)
+                                        {
+                                            foreach (var breed in ViewBag.Breeds)
+                                            {
+                                                <option value="@breed">@breed</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Location -->
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-dark mb-2">Location</label>
+                                <select name="Location" class="form-select form-select-lg border-0 bg-light py-3" required
+                                        style="border-radius: 10px; font-size: 1.1rem;">
+                                    <option value="" selected disabled>Select Location</option>
+                                    @if (ViewBag.Locations != null)
+                                    {
+                                        foreach (var location in ViewBag.Locations)
+                                        {
+                                            <option value="@location">@location</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+
+                            <!-- Age and Weight Row -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold text-dark mb-2">Age</label>
+                                    <input type="number" name="Age" class="form-control form-control-lg border-0 bg-light py-3"
+                                           style="border-radius: 10px; font-size: 1.1rem;" placeholder="Years" min="0" required />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold text-dark mb-2">Weight</label>
+                                    <input type="number" name="Weight" class="form-control form-control-lg border-0 bg-light py-3"
+                                           style="border-radius: 10px; font-size: 1.1rem;" placeholder="kg" min="0" step="0.1" required />
+                                </div>
+                            </div>
+
+                            <!-- Gender -->
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-dark mb-2">Gender</label>
+                                <select name="Gender" class="form-select form-select-lg border-0 bg-light py-3" required
+                                        style="border-radius: 10px; font-size: 1.1rem;">
+                                    <option value="" selected disabled>Select Gender</option>
+                                    @if (ViewBag.Genders != null)
+                                    {
+                                        foreach (var gender in ViewBag.Genders)
+                                        {
+                                            <option value="@gender">@gender</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+
+                            <!-- Upload Image -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold text-dark mb-2">Upload Image</label>
+                                <input type="file" name="petImage" class="form-control form-control-lg border-0 bg-light py-3"
+                                       style="border-radius: 10px; font-size: 1.1rem;" accept="image/*" required>
+                                <div class="form-text text-muted mt-1">Upload a clear photo of the pet</div>
+                            </div>
+
+                            <!-- Pet Story (now included in the same card) -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold text-dark mb-2">Pet Story</label>
+                                <textarea name="PetStory" class="form-control border-0 bg-light" rows="4"
+                                          style="border-radius: 10px; font-size: 1.1rem; padding: 15px;"
+                                          placeholder="Share the pet's story, personality, and any special needs..." required></textarea>
+                                <div class="form-text text-muted mt-1">Describe the pet's background, temperament, and what kind of home would be ideal</div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-success btn-lg w-100 py-3 fw-bold mt-3"
+                                    style="font-size: 1.2rem; border-radius: 10px;">
+                                <i class="fas fa-paw me-2"></i>Post
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
+
+<style>
+    .bg-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+    }
+
+    .card-header.bg-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+        border: none;
+    }
+
+    .btn-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #218838 0%, #1e9e8a 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+        }
+
+    .card {
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+
+        .card:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+        }
+
+    .form-select, .form-control {
+        border-radius: 10px !important;
+        transition: all 0.3s ease;
+        border: none !important;
+    }
+
+        .form-select:focus, .form-control:focus {
+            border-color: #28a745 !important;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+            transform: translateY(-1px);
+        }
+
+    .bg-light {
+        background-color: #f8f9fa !important;
+    }
+
+    .text-dark {
+        color: #2c3e50 !important;
+    }
+
+    .form-label {
+        font-size: 1rem;
+    }
+
+    .form-text {
+        font-size: 0.85rem;
+    }
+
+    /* Custom styling for file input */
+    .form-control[type="file"] {
+        padding: 12px !important;
+    }
+
+    /* Responsive adjustments */
+    @@media (max-width: 768px) {
+        .container-fluid .container {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .form-select-lg, .form-control-lg {
+            font-size: 1rem !important;
+            padding: 12px !important;
+        }
+
+        .btn-lg {
+            font-size: 1.1rem !important;
+            padding: 12px !important;
+        }
+    }
+</style>
