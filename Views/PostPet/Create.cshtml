@@ -4,7 +4,6 @@
 }
 
 <div class="container-fluid px-0">
-    <!-- Hero Section -->
     <div class="bg-success text-white py-4">
         <div class="container">
             <div class="text-center">
@@ -13,13 +12,12 @@
         </div>
     </div>
 
-    <!-- Main Content -->
     <div class="container mt-4">
         @using (Html.BeginForm("Create", "PostPet", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             <div class="row justify-content-center">
                 <div class="col-lg-8">
-                    <!-- Your Details Section -->
+                    <!-- Your Details -->
                     <div class="card border-0 shadow-sm mb-4">
                         <div class="card-header bg-success text-white py-3">
                             <h5 class="card-title mb-0 fw-bold">Your Details</h5>
@@ -43,7 +41,7 @@
                         </div>
                     </div>
 
-                    <!-- Pet Details Section (including Pet Story) -->
+                    <!-- Pet Details -->
                     <div class="card border-0 shadow-sm">
                         <div class="card-header bg-success text-white py-3">
                             <h5 class="card-title mb-0 fw-bold">Pet Details</h5>
@@ -56,7 +54,7 @@
                                        style="border-radius: 10px; font-size: 1.1rem;" placeholder="Enter pet name" required />
                             </div>
 
-                            <!-- Type and Breed Row -->
+                            <!-- Type and Breed -->
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-bold text-dark mb-2">Type</label>
@@ -104,7 +102,7 @@
                                 </select>
                             </div>
 
-                            <!-- Age and Weight Row -->
+                            <!-- Age and Weight -->
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-bold text-dark mb-2">Age</label>
@@ -134,7 +132,7 @@
                                 </select>
                             </div>
 
-                            <!-- Upload Image -->
+                            <!-- Image -->
                             <div class="mb-4">
                                 <label class="form-label fw-bold text-dark mb-2">Upload Image</label>
                                 <input type="file" name="petImage" class="form-control form-control-lg border-0 bg-light py-3"
@@ -142,7 +140,7 @@
                                 <div class="form-text text-muted mt-1">Upload a clear photo of the pet</div>
                             </div>
 
-                            <!-- Pet Story (now included in the same card) -->
+                            <!-- Pet Story -->
                             <div class="mb-4">
                                 <label class="form-label fw-bold text-dark mb-2">Pet Story</label>
                                 <textarea name="PetStory" class="form-control border-0 bg-light" rows="4"
@@ -151,7 +149,6 @@
                                 <div class="form-text text-muted mt-1">Describe the pet's background, temperament, and what kind of home would be ideal</div>
                             </div>
 
-                            <!-- Submit Button -->
                             <button type="submit" class="btn btn-success btn-lg w-100 py-3 fw-bold mt-3"
                                     style="font-size: 1.2rem; border-radius: 10px;">
                                 <i class="fas fa-paw me-2"></i>Post
@@ -165,6 +162,7 @@
 </div>
 
 <style>
+
     .bg-success {
         background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
     }
@@ -180,20 +178,20 @@
         transition: all 0.3s ease;
     }
 
-        .btn-success:hover {
-            background: linear-gradient(135deg, #218838 0%, #1e9e8a 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
-        }
+    .btn-success:hover {
+        background: linear-gradient(135deg, #218838 0%, #1e9e8a 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+    }
 
     .card {
         border-radius: 12px;
         transition: all 0.3s ease;
     }
 
-        .card:hover {
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
-        }
+    .card:hover {
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+    }
 
     .form-select, .form-control {
         border-radius: 10px !important;
@@ -201,11 +199,11 @@
         border: none !important;
     }
 
-        .form-select:focus, .form-control:focus {
-            border-color: #28a745 !important;
-            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
-            transform: translateY(-1px);
-        }
+    .form-select:focus, .form-control:focus {
+        border-color: #28a745 !important;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+        transform: translateY(-1px);
+    }
 
     .bg-light {
         background-color: #f8f9fa !important;
@@ -223,12 +221,11 @@
         font-size: 0.85rem;
     }
 
-    /* Custom styling for file input */
+
     .form-control[type="file"] {
         padding: 12px !important;
     }
 
-    /* Responsive adjustments */
     @@media (max-width: 768px) {
         .container-fluid .container {
             padding-left: 15px;
