@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;      // <-- for ConfigurationManager
-using System.Data;              // optional
+using System.Configuration;  
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -10,18 +10,18 @@ namespace HomeworkAssignment2.Models
 {
     public class RescuePetDataService
     {
+        // Get the databse connection string from the configuration file
         private string ConnectionString;
-
         public RescuePetDataService()
         {
             ConnectionString = ConfigurationManager.ConnectionStrings["RescuePetConnection"].ConnectionString;
         }
 
-        // Get all users
+        // Gets all users from the database
         public List<User> GetAllUsers()
         {
             List<User> users = new List<User>();
-
+            
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
@@ -29,6 +29,7 @@ namespace HomeworkAssignment2.Models
 
                 using (SqlCommand cmd = new SqlCommand(sql, connection))
                 {
+                    // Loops through each row and adds it to the User list
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
@@ -45,7 +46,7 @@ namespace HomeworkAssignment2.Models
             return users;
         }
 
-        // Get all pets with filters
+        // Gets all pets with filters
         public List<Pet> GetAllPetsByFilters(string type, string breed, string location, string status)
         {
             List<Pet> pets = new List<Pet>();
@@ -82,6 +83,7 @@ namespace HomeworkAssignment2.Models
                     if (status != "All")
                         cmd.Parameters.AddWithValue("@Status", status);
 
+                    // Loops through each row and adds it to the Pets list
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
@@ -107,7 +109,7 @@ namespace HomeworkAssignment2.Models
             return pets;
         }
 
-        // Get pet by ID
+        // Get pet info by ID
         public Pet GetPetById(int petId)
         {
             Pet pet = null;
@@ -151,7 +153,7 @@ namespace HomeworkAssignment2.Models
             return pet;
         }
 
-        // Insert new pet
+        // Insert new pet into database
         public bool InsertPet(Pet pet)
         {
             try
@@ -200,7 +202,7 @@ namespace HomeworkAssignment2.Models
                     {
                         try
                         {
-                            // Insert adoption record
+                            // Insert new adoption record
                             string adoptionSql = @"INSERT INTO Adoptions (PetId, AdoptedByUserId, AdoptionDate)
                                                    VALUES (@PetId, @AdoptedByUserId, @AdoptionDate)";
 
@@ -249,6 +251,7 @@ namespace HomeworkAssignment2.Models
                     string sql = @"INSERT INTO Donations (DonatedByUserId, Amount, DonationDate)
                                    VALUES (@DonatedByUserId, @Amount, @DonationDate)";
 
+                    // Sets its value in the database to the value of the variable
                     using (SqlCommand cmd = new SqlCommand(sql, connection))
                     {
                         cmd.Parameters.AddWithValue("@DonatedByUserId", donatedByUserId);
@@ -266,7 +269,7 @@ namespace HomeworkAssignment2.Models
             }
         }
 
-        // Get total donations
+        // Calculates total donations
         public decimal GetTotalDonations()
         {
             decimal total = 0;
@@ -288,13 +291,14 @@ namespace HomeworkAssignment2.Models
             return total;
         }
 
-        // Get adopted pets count
+        // Count adopted pets
         public int GetAdoptedPetsCount()
         {
             int count = 0;
 
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
+                // Counts all from the Pets table where status is set to adopted
                 connection.Open();
                 string sql = "SELECT COUNT(*) FROM Pets WHERE Status = 'Adopted'";
 
@@ -306,7 +310,7 @@ namespace HomeworkAssignment2.Models
             return count;
         }
 
-        // Get recent adoptions
+        // Gets 10 most recent adoptions
         public List<Adoption> GetRecentAdoptions(int count = 10)
         {
             List<Adoption> adoptions = new List<Adoption>();
@@ -325,7 +329,7 @@ namespace HomeworkAssignment2.Models
                 using (SqlCommand cmd = new SqlCommand(sql, connection))
                 {
                     cmd.Parameters.AddWithValue("@Count", count);
-
+                    // Loops through and adds each row to the Adoption list
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {

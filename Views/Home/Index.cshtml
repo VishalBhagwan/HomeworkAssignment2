@@ -3,7 +3,7 @@
 }
 
 <div class="container-fluid px-0">
-    <!-- Hero Section -->
+    <!-- Header section -->
     <div class="bg-success text-white py-4">
         <div class="container">
             <div class="text-center">
@@ -17,9 +17,9 @@
         </div>
     </div>
 
-    <!-- Main Content -->
+    <!-- Main -->
     <div class="container mt-4">
-        <!-- What We Do Section - Card Style -->
+        <!-- What we do section -->
         <div class="row mb-4">
             <div class="col-12">
                 <div class="card border-success shadow-sm">
@@ -40,11 +40,11 @@
             </div>
         </div>
 
-        <!-- Recent Adoptions Section -->
+        <!-- Recent adoptions section -->
         <div class="row">
             <div class="col-12">
                 <h4 class="mb-3 text-dark fw-bold">Recent Adoptions</h4>
-
+                <!-- Display adoptions -->
                 <div class="list-group">
                     @if (ViewBag.Adoptions != null && ViewBag.Adoptions.Count > 0)
                     {
@@ -73,6 +73,7 @@
     </div>
 </div>
 
+<!-- CSS -->
 <style>
     .bg-success {
         background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
@@ -87,9 +88,9 @@
         padding: 8px 12px;
     }
 
-        .list-group-item:hover {
-            background-color: #f8f9fa;
-        }
+    .list-group-item:hover {
+        background-color: #f8f9fa;
+    }
 
     .form-check-input:checked {
         background-color: #28a745;
@@ -108,9 +109,9 @@
         font-size: 1rem;
     }
 
-        .btn-success:hover {
-            background: linear-gradient(135deg, #218838 0%, #1e9e8a 100%);
-        }
+    .btn-success:hover {
+        background: linear-gradient(135deg, #218838 0%, #1e9e8a 100%);
+    }
 
     .text-dark {
         color: #2c3e50 !important;

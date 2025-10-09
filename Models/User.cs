@@ -12,8 +12,10 @@ namespace HomeworkAssignment2.Models
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
 
+        /*
         public virtual ICollection<Pet> Pets { get; set; }
         public virtual ICollection<Adoption> Adoptions { get; set; }
         public virtual ICollection<Donation> Donations { get; set; }
+        */
     }
 }

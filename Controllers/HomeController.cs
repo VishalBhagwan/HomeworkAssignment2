@@ -15,6 +15,7 @@ namespace HomeworkAssignment2.Controllers
 
         public ActionResult Index()
         {
+            // Retreives the data so that it can be displayed
             var adoptedCount = dataService.GetAdoptedPetsCount();
             var adoptions = dataService.GetRecentAdoptions(10);
 
@@ -24,6 +25,7 @@ namespace HomeworkAssignment2.Controllers
             return View();
         }
 
+        // Filters which update their filter variable above
         public ActionResult SetTypeFilter(string type)
         {
             TypeFilter = type;

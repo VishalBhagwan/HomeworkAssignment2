@@ -1,11 +1,14 @@
 ﻿@{
     ViewBag.Title = "Make a Donation";
-    decimal progress = ViewBag.ProgressPercentage;
-    string progressClass = progress >= 100 ? "bg-success" : "bg-success";
+
+    // Ensure proper formatting for CSS and display
+    decimal rawProgress = ViewBag.ProgressPercentage;
+    string progress = rawProgress.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture);
+    string progressClass = rawProgress >= 100 ? "bg-success" : "bg-success";
 }
 
 <div class="container-fluid px-0">
-    <!-- Hero Section -->
+    <!-- Header section -->
     <div class="bg-success text-white py-4">
         <div class="container">
             <div class="text-center">
@@ -14,11 +17,67 @@
         </div>
     </div>
 
-    <!-- Main Content -->
+    <!-- Main -->
     <div class="container mt-4">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card border-0 shadow-sm">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Why donate card -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-success text-white py-3">
+                        <h5 class="card-title mb-0 fw-bold">Why Donate to RescuePet?</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-start">
+                                    <i class="fas fa-heart text-success me-3 mt-1" style="font-size: 1.5rem;"></i>
+                                    <div>
+                                        <h6 class="fw-bold text-dark">Save Lives</h6>
+                                        <p class="text-muted mb-0">Your donation provides emergency medical care and life-saving treatments for rescued animals.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-start">
+                                    <i class="fas fa-home text-success me-3 mt-1" style="font-size: 1.5rem;"></i>
+                                    <div>
+                                        <h6 class="fw-bold text-dark">Provide Shelter</h6>
+                                        <p class="text-muted mb-0">Help us maintain safe, comfortable shelters while pets wait for their forever homes.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-start">
+                                    <i class="fas fa-utensils text-success me-3 mt-1" style="font-size: 1.5rem;"></i>
+                                    <div>
+                                        <h6 class="fw-bold text-dark">Nutrition & Care</h6>
+                                        <p class="text-muted mb-0">Funds go toward high-quality food, vitamins, and daily care for our rescued pets.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-start">
+                                    <i class="fas fa-stethoscope text-success me-3 mt-1" style="font-size: 1.5rem;"></i>
+                                    <div>
+                                        <h6 class="fw-bold text-dark">Medical Support</h6>
+                                        <p class="text-muted mb-0">Support vaccinations, spay/neuter programs, and ongoing medical needs.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 p-3 bg-light rounded">
+                            <p class="text-center text-muted mb-0">
+                                <strong>Every donation, no matter the size, makes a difference in a pet's life.</strong><br>
+                                Together, we can give homeless animals the second chance they deserve.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Donation progress card -->
+                <div class="card border-0 shadow-sm mb-4">
                     <div class="card-header bg-success text-white py-3">
                         <h5 class="card-title mb-0 fw-bold">Donation Progress</h5>
                     </div>
@@ -32,21 +91,22 @@
                             <span class="text-success fw-bold">R@(ViewBag.TotalDonated.ToString("N2"))</span>
                         </div>
 
+                        <!-- Fixed Progress Bar -->
                         <div class="progress mb-4" style="height: 30px; border-radius: 10px; background-color: #f8f9fa;">
                             <div class="progress-bar @progressClass progress-bar-striped"
                                  role="progressbar"
-                                 style="width: @progress%; border-radius: 10px;"
+                                 style="width: @progress%; border-radius: 10px; transition: width 0.8s ease-in-out;"
                                  aria-valuenow="@progress"
                                  aria-valuemin="0"
                                  aria-valuemax="100">
-                                @progress.ToString("0")%
+                                @progress%
                             </div>
                         </div>
 
-                        @if (progress >= 100)
+                        @if (rawProgress >= 100)
                         {
                             <div class="alert alert-success border-0" style="background-color: rgba(40, 167, 69, 0.1);">
-                                <strong class="text-success">🎉 Goal Reached! Thank you for your incredible support! 🎉</strong>
+                                <strong class="text-success">Goal Reached! Thank you for your incredible support!</strong>
                             </div>
                         }
                         else
@@ -57,28 +117,48 @@
                         }
                     </div>
                 </div>
-            </div>
 
-            <div class="col-md-6">
+
+                <!-- Make donation card -->
                 <div class="card border-0 shadow-sm">
                     <div class="card-header bg-success text-white py-3">
                         <h5 class="card-title mb-0 fw-bold">Make a Donation</h5>
                     </div>
                     <div class="card-body p-4">
-                        @using (Html.BeginForm("Donate", "Donation", FormMethod.Post))
+                        @using (Html.BeginForm("Donate", "Donation", FormMethod.Post, new { id = "donationForm" }))
                         {
+                            @Html.AntiForgeryToken()
+
+                            <!-- Name dropdown -->
                             <div class="mb-4">
                                 <label class="form-label fw-bold text-dark mb-2">Your Full Name:</label>
-                                <select name="donatedByUserId" class="form-select form-select-lg border-0 bg-light py-3" required
+                                <select name="donatedByUserId" id="userDropdown" class="form-select form-select-lg border-0 bg-light py-3" required
                                         style="border-radius: 10px; font-size: 1.1rem;">
                                     <option value="" selected disabled>Select your name</option>
-                                    @foreach (var user in ViewBag.Users)
+                                    @if (ViewBag.Users != null)
                                     {
-                                        <option value="@user.UserId">@user.FirstName @user.LastName</option>
+                                        foreach (var user in ViewBag.Users)
+                                        {
+                                            <option value="@user.UserId" data-phone="@user.PhoneNumber">
+                                                @user.FirstName @user.LastName
+                                            </option>
+                                        }
                                     }
                                 </select>
+                                <div class="form-text text-muted mt-1">Please select your name from the list</div>
                             </div>
 
+                            <!-- Phone number dropdown -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold text-dark mb-2">Phone Number:</label>
+                                <select name="phoneNumber" id="phoneDropdown" class="form-select form-select-lg border-0 bg-light py-3" required
+                                        style="border-radius: 10px; font-size: 1.1rem;">
+                                    <option value="" selected disabled>Select your phone number</option>
+                                </select>
+                                <div class="form-text text-muted mt-1">Your phone number for donation confirmation</div>
+                            </div>
+
+                            <!-- Donation amount -->
                             <div class="mb-4">
                                 <label class="form-label fw-bold text-dark mb-2">Donation Amount (R):</label>
                                 <input type="number" name="amount" class="form-control form-control-lg border-0 bg-light py-3"
@@ -86,6 +166,16 @@
                                        min="1" step="0.01" placeholder="Enter amount" required>
                             </div>
 
+                            <!-- Donation agreement -->
+                            <div class="alert alert-light border-0 mt-4 mb-4" style="background-color: #f8f9fa;">
+                                <h6 class="alert-heading text-success fw-bold mb-2">Donation Agreement</h6>
+                                <p class="mb-0 text-muted">
+                                    Your donation helps us provide care, shelter, and medical treatment for rescued pets.
+                                    Thank you for supporting our mission to give every pet a second chance at happiness!
+                                </p>
+                            </div>
+
+                            <!-- Submit button -->
                             <button type="submit" class="btn btn-success btn-lg w-100 py-3 fw-bold"
                                     style="font-size: 1.2rem; border-radius: 10px;">
                                 <i class="fas fa-heart me-2"></i>Make Donation
@@ -98,6 +188,74 @@
     </div>
 </div>
 
+<!-- JavaScript -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get references to the dropdowns
+        var userDropdown = document.getElementById('userDropdown');
+        var phoneDropdown = document.getElementById('phoneDropdown');
+        var donationForm = document.getElementById('donationForm');
+
+        // Select the user and automatically select the corresponding phone number
+        if (userDropdown && phoneDropdown) {
+            userDropdown.addEventListener('change', function () {
+                var selectedOption = this.options[this.selectedIndex];
+                var phoneNumber = selectedOption.getAttribute('data-phone');
+
+                phoneDropdown.innerHTML = '';
+
+                if (phoneNumber) {
+                    var option = document.createElement('option');
+                    option.value = phoneNumber;
+                    option.textContent = phoneNumber;
+                    option.selected = true;
+                    phoneDropdown.appendChild(option);
+                } else {
+                    var defaultOption = document.createElement('option');
+                    defaultOption.value = "";
+                    defaultOption.textContent = "Select your phone number";
+                    defaultOption.disabled = true;
+                    defaultOption.selected = true;
+                    phoneDropdown.appendChild(defaultOption);
+                }
+            });
+        }
+
+        // Validation before submitting
+        if (donationForm) {
+            donationForm.addEventListener('submit', function (e) {
+                var userName = userDropdown ? userDropdown.value : '';
+                var phoneNumber = phoneDropdown ? phoneDropdown.value : '';
+                var amount = document.querySelector('input[name="amount"]').value;
+
+                if (!userName) {
+                    e.preventDefault();
+                    alert('Please select your name from the list.');
+                    return false;
+                }
+
+                if (!phoneNumber) {
+                    e.preventDefault();
+                    alert('Please ensure your phone number is selected.');
+                    return false;
+                }
+
+                if (!amount || amount <= 0) {
+                    e.preventDefault();
+                    alert('Please enter a valid donation amount.');
+                    return false;
+                }
+
+                if (!confirm('Are you sure you want to donate R' + amount + ' to RescuePet?')) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        }
+    });
+</script>
+
+<!-- CSS -->
 <style>
     .bg-success {
         background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
@@ -114,20 +272,20 @@
         transition: all 0.3s ease;
     }
 
-        .btn-success:hover {
-            background: linear-gradient(135deg, #218838 0%, #1e9e8a 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
-        }
+    .btn-success:hover {
+        background: linear-gradient(135deg, #218838 0%, #1e9e8a 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+    }
 
     .card {
         border-radius: 12px;
         transition: all 0.3s ease;
     }
 
-        .card:hover {
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
-        }
+    .card:hover {
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+    }
 
     .form-select, .form-control {
         border-radius: 10px !important;
@@ -135,52 +293,33 @@
         border: none !important;
     }
 
-        .form-select:focus, .form-control:focus {
-            border-color: #28a745 !important;
-            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
-            transform: translateY(-1px);
-        }
-
-    .bg-light {
-        background-color: #f8f9fa !important;
-    }
-
-    .text-dark {
-        color: #2c3e50 !important;
+    .form-select:focus, .form-control:focus {
+        border-color: #28a745 !important;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+        transform: translateY(-1px);
     }
 
     .progress-bar.bg-success {
         background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
     }
 
-    .alert-success {
-        background-color: rgba(40, 167, 69, 0.1) !important;
-        border: none !important;
+    .alert-success, .alert-light {
         border-radius: 10px;
+        border: none !important;
     }
 
-    .alert-light {
-        background-color: #f8f9fa !important;
-        border: none !important;
-        border-radius: 10px;
-    }
-
-    /* Responsive adjustments */
     @@media (max-width: 768px) {
         .container-fluid .container {
             padding-left: 15px;
             padding-right: 15px;
         }
-
         .card-body {
             padding: 1.5rem;
         }
-
         .form-select-lg, .form-control-lg {
             font-size: 1rem !important;
             padding: 12px !important;
         }
-
         .btn-lg {
             font-size: 1.1rem !important;
             padding: 12px !important;

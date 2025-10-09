@@ -11,7 +11,6 @@ namespace HomeworkAssignment2.Models
         public int PetId { get; set; }
         public int AdoptedByUserId { get; set; }
         public DateTime AdoptionDate { get; set; }
-
         public string PetName { get; set; }
         public string AdoptedByUserName { get; set; }
     }

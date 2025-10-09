@@ -4,7 +4,7 @@
 }
 
 <div class="container-fluid px-0">
-    <!-- Hero Section -->
+    <!-- Header section -->
     <div class="bg-success text-white py-4">
         <div class="container">
             <div class="text-center">
@@ -13,12 +13,12 @@
         </div>
     </div>
 
-    <!-- Main Content -->
+    <!-- Main -->
     <div class="container mt-4">
         <div class="row">
-            <!-- Left Column - Pet Info -->
+            <!-- Pet info -->
             <div class="col-lg-6">
-                <!-- Pet Image -->
+                <!-- Pet image -->
                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-body text-center p-0">
                         @if (!string.IsNullOrEmpty(Model.ImageBase64))
@@ -37,13 +37,13 @@
                     </div>
                 </div>
 
-                <!-- Pet Story -->
+                <!-- Pet story -->
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
                         <h4 class="text-success fw-bold mb-3">Hi, I'm @Model.Name!</h4>
                         <h6 class="text-muted mb-4">I'm looking for my dream home!</h6>
 
-                        <!-- Pet Quick Details -->
+                        <!-- Pet details -->
                         <div class="d-flex flex-wrap gap-3 mb-4">
                             <span class="badge bg-light text-dark p-2">
                                 <i class="fas fa-map-marker-alt me-1"></i> @Model.Location
@@ -65,7 +65,7 @@
                 </div>
             </div>
 
-            <!-- Right Column - Adoption Form -->
+            <!-- Adoption form -->
             <div class="col-lg-6">
                 <div class="card border-0 shadow-sm">
                     <div class="card-header bg-success text-white py-3">
@@ -77,7 +77,7 @@
                             @Html.AntiForgeryToken()
                             <input type="hidden" name="petId" value="@Model.PetId" />
 
-                            <!-- Full Name Dropdown -->
+                            <!-- Full name dropdown -->
                             <div class="mb-4">
                                 <label class="form-label fw-bold text-dark mb-2">Full Name</label>
                                 <select name="adoptedByUserId" id="userDropdown" class="form-select form-select-lg border-0 bg-light py-3" required
@@ -96,7 +96,7 @@
                                 <div class="form-text text-muted mt-1">Please select your name from the list</div>
                             </div>
 
-                            <!-- Phone Number Dropdown -->
+                            <!-- Phone number dropdown -->
                             <div class="mb-4">
                                 <label class="form-label fw-bold text-dark mb-2">Phone Number</label>
                                 <select name="phoneNumber" id="phoneDropdown" class="form-select form-select-lg border-0 bg-light py-3" required
@@ -107,7 +107,7 @@
                                 <div class="form-text text-muted mt-1">Your phone number will be used for adoption updates</div>
                             </div>
 
-                            <!-- Adoption Agreement -->
+                            <!-- Adoption agreement -->
                             <div class="alert alert-light border-0 mt-4 mb-4" style="background-color: #f8f9fa;">
                                 <h6 class="alert-heading text-success fw-bold mb-2">Adoption Agreement</h6>
                                 <p class="mb-0 text-muted">
@@ -116,7 +116,7 @@
                                 </p>
                             </div>
 
-                            <!-- Submit Button -->
+                            <!-- Submit button -->
                             <button type="submit" class="btn btn-success btn-lg w-100 py-3 fw-bold mt-3"
                                     style="font-size: 1.2rem; border-radius: 10px;">
                                 <i class="fas fa-heart me-2"></i>Adopt Now!
@@ -124,15 +124,12 @@
                         }
                     </div>
                 </div>
-
-                <!-- Pet Details Card -->
-                
             </div>
         </div>
     </div>
 </div>
 
-<!-- Inline JavaScript (no section scripts) -->
+<!-- JavaScript -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Get references to the dropdowns
@@ -140,17 +137,15 @@
         var phoneDropdown = document.getElementById('phoneDropdown');
         var adoptionForm = document.getElementById('adoptionForm');
 
-        // Phone number dropdown functionality
+        // Select the user and automatically select the corresponding phone number
         if (userDropdown && phoneDropdown) {
             userDropdown.addEventListener('change', function() {
                 var selectedOption = this.options[this.selectedIndex];
                 var phoneNumber = selectedOption.getAttribute('data-phone');
 
-                // Clear previous options
                 phoneDropdown.innerHTML = '';
 
                 if (phoneNumber) {
-                    // Add the phone number as an option
                     var option = document.createElement('option');
                     option.value = phoneNumber;
                     option.textContent = phoneNumber;
@@ -167,7 +162,7 @@
             });
         }
 
-        // Form submission handling
+        // Validate before submitting
         if (adoptionForm) {
             adoptionForm.addEventListener('submit', function(e) {
                 var userName = userDropdown ? userDropdown.value : '';
@@ -184,17 +179,12 @@
                     alert('Please ensure your phone number is selected.');
                     return false;
                 }
-
-                // Optional: Show confirmation dialog
-                if (!confirm('Are you sure you want to adopt @Model.Name? This action cannot be undone.')) {
-                    e.preventDefault();
-                    return false;
-                }
             });
         }
     });
 </script>
 
+<!-- CSS -->
 <style>
     .bg-success {
         background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
@@ -211,31 +201,31 @@
         transition: all 0.3s ease;
     }
 
-        .btn-success:hover {
-            background: linear-gradient(135deg, #218838 0%, #1e9e8a 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
-        }
+    .btn-success:hover {
+        background: linear-gradient(135deg, #218838 0%, #1e9e8a 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+    }
 
     .card {
         border-radius: 12px;
         transition: all 0.3s ease;
     }
 
-        .card:hover {
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
-        }
+    .card:hover {
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+    }
 
     .form-select {
         border-radius: 10px !important;
         transition: all 0.3s ease;
     }
 
-        .form-select:focus {
-            border-color: #28a745;
-            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
-            transform: translateY(-1px);
-        }
+    .form-select:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        transform: translateY(-1px);
+    }
 
     .badge.bg-light {
         border: 1px solid #dee2e6;
@@ -254,7 +244,6 @@
         border-radius: 10px;
     }
 
-    /* Custom scrollbar for dropdowns */
     .form-select::-webkit-scrollbar {
         width: 8px;
     }
@@ -269,11 +258,10 @@
         border-radius: 10px;
     }
 
-        .form-select::-webkit-scrollbar-thumb:hover {
-            background: #218838;
-        }
+    .form-select::-webkit-scrollbar-thumb:hover {
+        background: #218838;
+    }
 
-    /* Responsive adjustments */
     @@media (max-width: 768px) {
         .container-fluid .container {
             padding-left: 15px;

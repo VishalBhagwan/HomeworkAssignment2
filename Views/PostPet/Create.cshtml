@@ -13,41 +13,57 @@
     </div>
 
     <div class="container mt-4">
-        @using (Html.BeginForm("Create", "PostPet", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        @using (Html.BeginForm("Create", "PostPet", FormMethod.Post, new { enctype = "multipart/form-data", id = "postPetForm" }))
         {
+            @Html.AntiForgeryToken()
+
             <div class="row justify-content-center">
                 <div class="col-lg-8">
-                    <!-- Your Details -->
+                    <!-- Your details -->
                     <div class="card border-0 shadow-sm mb-4">
                         <div class="card-header bg-success text-white py-3">
                             <h5 class="card-title mb-0 fw-bold">Your Details</h5>
                         </div>
                         <div class="card-body p-4">
+                            <!-- Full name dropdown -->
                             <div class="mb-4">
                                 <label class="form-label fw-bold text-dark mb-2">Full Name</label>
-                                <select name="postedByUserId" class="form-select form-select-lg border-0 bg-light py-3" required
+                                <select name="postedByUserId" id="userDropdown" class="form-select form-select-lg border-0 bg-light py-3" required
                                         style="border-radius: 10px; font-size: 1.1rem;">
                                     <option value="" selected disabled>Select your name</option>
                                     @if (ViewBag.Users != null)
                                     {
                                         foreach (var user in ViewBag.Users)
                                         {
-                                            <option value="@user.UserId">@user.FirstName @user.LastName</option>
+                                            <option value="@user.UserId" data-phone="@user.PhoneNumber">
+                                                @user.FirstName @user.LastName
+                                            </option>
                                         }
                                     }
                                 </select>
                                 <div class="form-text text-muted mt-1">Please select your name from the list</div>
                             </div>
+
+                            <!-- Phone number dropdown -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold text-dark mb-2">Phone Number</label>
+                                <select name="phoneNumber" id="phoneDropdown" class="form-select form-select-lg border-0 bg-light py-3" required
+                                        style="border-radius: 10px; font-size: 1.1rem;">
+                                    <option value="" selected disabled>Select your phone number</option>
+                                    <!-- Phone numbers will be populated dynamically -->
+                                </select>
+                                <div class="form-text text-muted mt-1">Your phone number for contact purposes</div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Pet Details -->
+                    <!-- Pet details -->
                     <div class="card border-0 shadow-sm">
                         <div class="card-header bg-success text-white py-3">
                             <h5 class="card-title mb-0 fw-bold">Pet Details</h5>
                         </div>
                         <div class="card-body p-4">
-                            <!-- Pet Name -->
+                            <!-- Pet name -->
                             <div class="mb-3">
                                 <label class="form-label fw-bold text-dark mb-2">Pet Name</label>
                                 <input type="text" name="Name" class="form-control form-control-lg border-0 bg-light py-3"
@@ -72,17 +88,9 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-bold text-dark mb-2">Breed</label>
-                                    <select name="Breed" class="form-select form-select-lg border-0 bg-light py-3" required
-                                            style="border-radius: 10px; font-size: 1.1rem;">
-                                        <option value="" selected disabled>Select Breed</option>
-                                        @if (ViewBag.Breeds != null)
-                                        {
-                                            foreach (var breed in ViewBag.Breeds)
-                                            {
-                                                <option value="@breed">@breed</option>
-                                            }
-                                        }
-                                    </select>
+                                    <input type="text" name="Breed" class="form-control form-control-lg border-0 bg-light py-3"
+                                           style="border-radius: 10px; font-size: 1.1rem;" placeholder="Enter breed" required />
+                                    <div class="form-text text-muted mt-1">Enter the specific breed of the pet</div>
                                 </div>
                             </div>
 
@@ -107,12 +115,14 @@
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-bold text-dark mb-2">Age</label>
                                     <input type="number" name="Age" class="form-control form-control-lg border-0 bg-light py-3"
-                                           style="border-radius: 10px; font-size: 1.1rem;" placeholder="Years" min="0" required />
+                                           style="border-radius: 10px; font-size: 1.1rem;" placeholder="Years" min="0" step="0.1" required />
+                                    <div class="form-text text-muted mt-1">Enter age in years</div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-bold text-dark mb-2">Weight</label>
                                     <input type="number" name="Weight" class="form-control form-control-lg border-0 bg-light py-3"
-                                           style="border-radius: 10px; font-size: 1.1rem;" placeholder="kg" min="0" step="0.1" required />
+                                           style="border-radius: 10px; font-size: 1.1rem;" placeholder="kg" min="0" step="0.01" required />
+                                    <div class="form-text text-muted mt-1">Enter weight in kilograms (e.g., 12.5 for 12 and a half kg)</div>
                                 </div>
                             </div>
 
@@ -140,7 +150,7 @@
                                 <div class="form-text text-muted mt-1">Upload a clear photo of the pet</div>
                             </div>
 
-                            <!-- Pet Story -->
+                            <!-- Pet story -->
                             <div class="mb-4">
                                 <label class="form-label fw-bold text-dark mb-2">Pet Story</label>
                                 <textarea name="PetStory" class="form-control border-0 bg-light" rows="4"
@@ -161,8 +171,95 @@
     </div>
 </div>
 
-<style>
+<!-- JavaScript -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get references to the dropdowns
+        var userDropdown = document.getElementById('userDropdown');
+        var phoneDropdown = document.getElementById('phoneDropdown');
+        var postPetForm = document.getElementById('postPetForm');
 
+        // Select the user and automatically select the corresponding phone number
+        if (userDropdown && phoneDropdown) {
+            userDropdown.addEventListener('change', function () {
+                var selectedOption = this.options[this.selectedIndex];
+                var phoneNumber = selectedOption.getAttribute('data-phone');
+
+                phoneDropdown.innerHTML = '';
+
+                if (phoneNumber) {
+                    var option = document.createElement('option');
+                    option.value = phoneNumber;
+                    option.textContent = phoneNumber;
+                    option.selected = true;
+                    phoneDropdown.appendChild(option);
+                } else {
+                    var defaultOption = document.createElement('option');
+                    defaultOption.value = "";
+                    defaultOption.textContent = "Select your phone number";
+                    defaultOption.disabled = true;
+                    defaultOption.selected = true;
+                    phoneDropdown.appendChild(defaultOption);
+                }
+            });
+        }
+
+        // Validate before submitting
+        if (postPetForm) {
+            postPetForm.addEventListener('submit', function (e) {
+                var userName = userDropdown ? userDropdown.value : '';
+                var phoneNumber = phoneDropdown ? phoneDropdown.value : '';
+                var petName = document.querySelector('input[name="Name"]').value;
+                var breed = document.querySelector('input[name="Breed"]').value;
+                var age = document.querySelector('input[name="Age"]').value;
+                var weight = document.querySelector('input[name="Weight"]').value;
+
+                if (!userName) {
+                    e.preventDefault();
+                    alert('Please select your name from the list.');
+                    return false;
+                }
+
+                if (!phoneNumber) {
+                    e.preventDefault();
+                    alert('Please ensure your phone number is selected.');
+                    return false;
+                }
+
+                if (!petName) {
+                    e.preventDefault();
+                    alert('Please enter a pet name.');
+                    return false;
+                }
+
+                if (!breed) {
+                    e.preventDefault();
+                    alert('Please enter the pet breed.');
+                    return false;
+                }
+
+                if (!age || age <= 0) {
+                    e.preventDefault();
+                    alert('Please enter a valid age.');
+                    return false;
+                }
+
+                if (!weight || weight <= 0) {
+                    e.preventDefault();
+                    alert('Please enter a valid weight.');
+                    return false;
+                }
+
+                // Format age and weight for display
+                var formattedAge = parseFloat(age).toFixed(1);
+                var formattedWeight = parseFloat(weight).toFixed(2);
+            });
+        }
+    });
+</script>
+
+<!-- CSS -->
+<style>
     .bg-success {
         background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
     }
@@ -221,9 +318,26 @@
         font-size: 0.85rem;
     }
 
-
     .form-control[type="file"] {
         padding: 12px !important;
+    }
+
+    .form-select::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .form-select::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .form-select::-webkit-scrollbar-thumb {
+        background: #28a745;
+        border-radius: 10px;
+    }
+
+    .form-select::-webkit-scrollbar-thumb:hover {
+        background: #218838;
     }
 
     @@media (max-width: 768px) {
