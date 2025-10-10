@@ -154,7 +154,12 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\Bernedoodle Dog.jpg" />
+    <Content Include="Images\Cockatoo Bird.jpg" />
+    <Content Include="Images\Husky Dog.jpg" />
+    <Content Include="Images\Labrador Dog.jpg" />
     <Content Include="Images\Logo.jpg" />
+    <Content Include="Images\Persian Cat.jpg" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
