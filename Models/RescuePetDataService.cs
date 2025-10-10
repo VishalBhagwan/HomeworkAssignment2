@@ -83,7 +83,7 @@ namespace HomeworkAssignment2.Models
                     if (status != "All")
                         cmd.Parameters.AddWithValue("@Status", status);
 
-                    // Loops through each row and adds it to the Pets list
+                    // Loops through each row and adds it to the Pets list that match the filters
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
@@ -298,7 +298,7 @@ namespace HomeworkAssignment2.Models
 
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                // Counts all from the Pets table where status is set to adopted
+                // Counts all the entries from the Pets table where status is set to adopted
                 connection.Open();
                 string sql = "SELECT COUNT(*) FROM Pets WHERE Status = 'Adopted'";
 
@@ -348,22 +348,8 @@ namespace HomeworkAssignment2.Models
             return adoptions;
         }
 
-        // Get distinct values for dropdowns
-        public List<string> GetDistinctTypes()
-        {
-            return GetDistinctValues("Pets", "Type");
-        }
-
-        public List<string> GetDistinctBreeds()
-        {
-            return GetDistinctValues("Pets", "Breed");
-        }
-
-        public List<string> GetDistinctLocations()
-        {
-            return GetDistinctValues("Pets", "Location");
-        }
-
+        
+        // Get distinct values for filter dropdowns
         private List<string> GetDistinctValues(string table, string column)
         {
             List<string> values = new List<string>();
@@ -384,5 +370,22 @@ namespace HomeworkAssignment2.Models
             }
             return values;
         }
+
+        // Adds distinct pet types, breeds and locations that is already in the Pet table to the filter dropdowns
+        public List<string> GetDistinctTypes()
+        {
+            return GetDistinctValues("Pets", "Type");
+        }
+
+        public List<string> GetDistinctBreeds()
+        {
+            return GetDistinctValues("Pets", "Breed");
+        }
+
+        public List<string> GetDistinctLocations()
+        {
+            return GetDistinctValues("Pets", "Location");
+        }
+
     }
 }

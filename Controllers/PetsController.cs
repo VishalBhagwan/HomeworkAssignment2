@@ -22,10 +22,11 @@ namespace HomeworkAssignment2.Controllers
             // Get filtered pets from database
             var pets = dataService.GetAllPetsByFilters(type, breed, location, status);
 
-            // Populate ViewBag for dropdowns
+            // Populate ViewBag for filter dropdowns
             ViewBag.Types = dataService.GetDistinctTypes();
             ViewBag.Locations = dataService.GetDistinctLocations();
             ViewBag.Breeds = dataService.GetDistinctBreeds();
+            
 
             // Pass current selections to the view to show the current selected values
             ViewBag.CurrentType = type;

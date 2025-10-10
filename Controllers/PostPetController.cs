@@ -77,6 +77,11 @@ namespace HomeworkAssignment2.Controllers
                 pet.PostedByUserId = postedByUserId;
                 pet.Status = "Available";
 
+                dataService.InsertPet(pet);
+
+                TempData["Success"] = "Pet posted successfully!";
+                return RedirectToAction("Index", "Pets");
+
             }
             catch (Exception ex)
             {
